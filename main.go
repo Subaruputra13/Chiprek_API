@@ -1,9 +1,17 @@
 package main
 
 import (
-	"fmt"
+	"Chiprek/config"
+
+	"github.com/labstack/echo"
 )
 
 func main() {
-	fmt.Println("Hello World")
+	config.InitDB()
+
+	e := echo.New()
+
+	// routes.NewRoute(e, db)
+
+	e.Logger.Fatal(e.Start(":8080"))
 }
