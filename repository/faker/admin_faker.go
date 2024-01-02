@@ -11,6 +11,7 @@ func AdminFaker(db *gorm.DB) *models.Admin {
 	passwordhash, _ := bcrypt.GenerateFromPassword([]byte("admin123"), bcrypt.DefaultCost)
 
 	return &models.Admin{
+		Username: "admin",
 		Password: string(passwordhash),
 	}
 }

@@ -2,6 +2,7 @@ package config
 
 import (
 	"Chiprek/models"
+	"Chiprek/repository/seeder"
 	"fmt"
 
 	"gorm.io/driver/mysql"
@@ -20,7 +21,7 @@ type Config struct {
 
 func InitDB() *gorm.DB {
 	config := Config{
-		DB_Username: "root",
+		DB_Username: "alta",
 		DB_Password: "root",
 		DB_Port:     "3306",
 		DB_Host:     "localhost",
@@ -45,7 +46,7 @@ func InitDB() *gorm.DB {
 	}
 
 	InitMigrate()
-	// seeder.DBSeed(DB)
+	seeder.DBSeed(DB)
 
 	return DB
 }

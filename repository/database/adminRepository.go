@@ -9,6 +9,7 @@ import (
 
 type AdminRepository interface {
 	LoginAdmin(admin *models.Admin) error
+	GetAdminUsername(username string) (*models.Admin, error)
 }
 
 type adminRespository struct {
@@ -26,4 +27,15 @@ func (a *adminRespository) LoginAdmin(admin *models.Admin) error {
 	}
 
 	return nil
+}
+
+// Get Admin
+func (a *adminRespository) GetAdminUsername(username string) (*models.Admin, error) {
+	var admin models.Admin
+
+	if err := config.DB.Where("username = ?", username).First(&admin).Error; err != nil {
+		return nil, err
+	}
+
+	return &admin, nil
 }
