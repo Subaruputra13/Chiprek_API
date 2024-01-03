@@ -53,7 +53,7 @@ func InitDB() *gorm.DB {
 
 func InitMigrate() {
 	// Migrate the schema
-	err := DB.AutoMigrate(&models.Admin{}, &models.Customer{}, &models.Menu{}, &models.Keranjang{}, &models.DetailPemesanan{})
+	err := DB.AutoMigrate(&models.Admin{}, &models.Menu{}, &models.Keranjang{}, &models.DetailPemesanan{})
 
 	if err != nil {
 		panic("Failed to migrate database")
