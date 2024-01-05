@@ -47,8 +47,10 @@ func (m *menuUsecase) GetMenuByID(id int) (menu *models.Menu, err error) {
 // Create Menu
 func (m *menuUsecase) CreateMenu(req *payload.CreateMenuRequest) (menu *models.Menu, err error) {
 	menuReq := &models.Menu{
-		Nama:  req.Nama,
-		Harga: req.Harga,
+		Nama:       req.Nama,
+		Harga:      req.Harga,
+		ImageURL:   req.ImageUrl,
+		CategoryID: req.CategoryID,
 	}
 
 	if err := m.menuRespository.CreateMenu(menuReq); err != nil {
@@ -59,16 +61,17 @@ func (m *menuUsecase) CreateMenu(req *payload.CreateMenuRequest) (menu *models.M
 }
 
 // Update Menu
-func (m *menuUsecase) UpdateMenu(id int, req *payload.UpdateMenuRequest) (*models.Menu, error) {
-	menu, err := m.menuRespository.GetMenuByID(id)
+func (m *menuUsecase) UpdateMenu(id int, req *payload.UpdateMenuRequest) (menu *models.Menu, err error) {
+	menuid, err := m.menuRespository.GetMenuByID(id)
 	if err != nil {
 		return nil, echo.NewHTTPError(400, err.Error())
 	}
 
-	menu.Nama = req.Nama
-	menu.Harga = req.Harga
+	menuid.Nama = req.Nama
+	menuid.Harga = req.Harga
+	menuid.ImageURL = req.ImageUrl
 
-	err = m.menuRespository.UpdateMenu(menu)
+	menu, err = m.menuRespository.UpdateMenu(menuid)
 	if err != nil {
 		return nil, echo.NewHTTPError(400, err.Error())
 	}

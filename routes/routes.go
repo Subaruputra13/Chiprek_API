@@ -31,6 +31,11 @@ func NewRoute(e *echo.Echo, db *gorm.DB) {
 	menuUsecase := usecase.NewMenuUsecase(menuRepository)
 	menuController := controllers.NewMenuControllers(menuUsecase)
 
+	//Category
+	categoryRepository := database.NewCategoryRepository(db)
+	categoryUsecase := usecase.NewCategoryUsecase(categoryRepository)
+	categoryController := controllers.NewCategoryControllers(categoryUsecase)
+
 	//Admin Route
 	e.POST("/admin", adminController.LoginAdminController)
 	m := e.Group("/Dashboard/Menu", m.IsLoggedIn)
@@ -38,4 +43,13 @@ func NewRoute(e *echo.Echo, db *gorm.DB) {
 	m.POST("", menuController.CreateMenuController)
 	m.PUT("/:id", menuController.UpdateMenuController)
 	m.DELETE("/:id", menuController.DeleteMenuController)
+
+	//Image Upload Route
+	e.POST("/upload/image", controllers.UploadImageCloudBase64Controller)
+
+	//Category Route
+	c := e.Group("/category")
+	c.GET("", categoryController.GetAllCategoryController)
+	c.GET("/:id", categoryController.GetCategoryByIDController)
+
 }

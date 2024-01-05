@@ -10,7 +10,7 @@ type MenuRepository interface {
 	GetAllMenu() (menu []models.Menu, err error)
 	GetMenuByID(id int) (menu *models.Menu, err error)
 	CreateMenu(menu *models.Menu) error
-	UpdateMenu(menu *models.Menu) error
+	UpdateMenu(menu *models.Menu) (*models.Menu, error)
 	DeleteMenu(menu *models.Menu) error
 }
 
@@ -25,7 +25,7 @@ func NewMenuRepository(db *gorm.DB) *menuRespository {
 // Get All Menu
 func (m *menuRespository) GetAllMenu() (menu []models.Menu, err error) {
 
-	if err := m.db.Find(&menu).Error; err != nil {
+	if err := m.db.Preload("Pesanan").Find(&menu).Error; err != nil {
 		return nil, err
 	}
 
@@ -34,7 +34,7 @@ func (m *menuRespository) GetAllMenu() (menu []models.Menu, err error) {
 
 // Get Menu By ID
 func (m *menuRespository) GetMenuByID(id int) (menu *models.Menu, err error) {
-	if err := m.db.Where("id = ?", id).First(&menu).Error; err != nil {
+	if err := m.db.Preload("Pesanan").Where("id = ?", id).First(&menu).Error; err != nil {
 		return nil, err
 	}
 
@@ -48,16 +48,15 @@ func (m *menuRespository) CreateMenu(menu *models.Menu) error {
 	}
 
 	return nil
-
 }
 
 // Update Menu
-func (m *menuRespository) UpdateMenu(menu *models.Menu) error {
+func (m *menuRespository) UpdateMenu(menu *models.Menu) (*models.Menu, error) {
 	if err := m.db.Updates(&menu).Error; err != nil {
-		return err
+		return nil, err
 	}
 
-	return nil
+	return menu, nil
 }
 
 // Delete Menu

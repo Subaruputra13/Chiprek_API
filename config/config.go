@@ -21,7 +21,7 @@ type Config struct {
 
 func InitDB() *gorm.DB {
 	config := Config{
-		DB_Username: "root",
+		DB_Username: "alta",
 		DB_Password: "root",
 		DB_Port:     "3306",
 		DB_Host:     "localhost",
@@ -53,7 +53,7 @@ func InitDB() *gorm.DB {
 
 func InitMigrate() {
 	// Migrate the schema
-	err := DB.AutoMigrate(&models.Admin{}, &models.Menu{}, &models.Pesanan{}, &models.Keranjang{}, &models.DetailPemesanan{})
+	err := DB.AutoMigrate(&models.Admin{}, &models.Category{}, &models.Menu{}, &models.Pesanan{}, &models.Keranjang{}, &models.DetailPemesanan{})
 
 	if err != nil {
 		panic("Failed to migrate database")

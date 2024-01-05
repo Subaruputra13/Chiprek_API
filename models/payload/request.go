@@ -6,18 +6,15 @@ type LoginAdminRequest struct {
 }
 
 type CreateMenuRequest struct {
-	Nama   string `json:"nama" form:"nama" validate:"required"`
-	Nasi   string `json:"nasi" form:"nasi"`
-	Harga  int    `json:"harga" form:"harga" validate:"required"`
-	Jumlah int    `json:"jumlah" form:"jumlah"`
-	Cabe   int    `json:"cabe" form:"cabe"`
+	Nama       string `json:"nama" form:"nama" validate:"required"`
+	Harga      int    `json:"harga" form:"harga" validate:"required"`
+	ImageUrl   string `json:"image_url" form:"image_url"`
+	CategoryID int    `json:"category_id" form:"category_id" validate:"required"`
 }
 type UpdateMenuRequest struct {
-	Nama   string `json:"nama" form:"nama" validate:"required"`
-	Nasi   string `json:"nasi" form:"nasi"`
-	Harga  int    `json:"harga" form:"harga" validate:"required"`
-	Jumlah int    `json:"jumlah" form:"jumlah"`
-	Cabe   int    `json:"cabe" form:"cabe"`
+	Nama     string `json:"nama" form:"nama"`
+	Harga    int    `json:"harga" form:"harga"`
+	ImageUrl string `json:"image_url" form:"image_url"`
 }
 
 type UploadImageCloudinaryBase64 struct {
