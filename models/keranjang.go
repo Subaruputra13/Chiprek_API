@@ -2,11 +2,21 @@ package models
 
 import "gorm.io/gorm"
 
-type Keranjang struct {
+type Cart struct {
 	gorm.Model
-	TotalHarga      int    `json:"total_harga" form:"total_harga"`
-	NoMeja          int    `json:"no_meja" form:"no_meja"`
-	Catatan         string `json:"catatan" form:"catatan"`
-	PesananID       int    `json:"pesanan_id" form:"pesanan_id"`
-	DetailPemesanan DetailPemesanan
+	TotalPrice int    `json:"total_price" form:"total_price"`
+	Status     string `json:"status" form:"status" gorm:"type:enum('pending','diproses','selesai');default:'pending'"`
+	NoTable    int    `json:"no_table" form:"no_table"`
+	CartItem   []CartItem
+}
+
+type CartItem struct {
+	gorm.Model
+	Quantity int    `json:"quantity" form:"quantity"`
+	TakeAway bool   `json:"take_away" form:"take_away"`
+	Note     string `json:"note" form:"note"`
+	NoTable  int    `json:"no_table" form:"no_table"`
+	CartID   int    `json:"cart_id" form:"cart_id"`
+	MenuID   int    `json:"menu_id" form:"menu_id"`
+	Menu     Menu
 }

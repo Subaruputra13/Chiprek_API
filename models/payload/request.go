@@ -6,14 +6,14 @@ type LoginAdminRequest struct {
 }
 
 type CreateMenuRequest struct {
-	Nama       string `json:"nama" form:"nama" validate:"required"`
-	Harga      int    `json:"harga" form:"harga" validate:"required"`
+	Name       string `json:"name" form:"name" validate:"required"`
+	Price      int    `json:"price" form:"price" validate:"required"`
 	ImageUrl   string `json:"image_url" form:"image_url"`
 	CategoryID int    `json:"category_id" form:"category_id" validate:"required"`
 }
 type UpdateMenuRequest struct {
-	Nama     string `json:"nama" form:"nama"`
-	Harga    int    `json:"harga" form:"harga"`
+	Name     string `json:"name" form:"name"`
+	Price    int    `json:"price" form:"price"`
 	ImageUrl string `json:"image_url" form:"image_url"`
 }
 

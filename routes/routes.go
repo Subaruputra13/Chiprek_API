@@ -44,6 +44,10 @@ func NewRoute(e *echo.Echo, db *gorm.DB) {
 	m.PUT("/:id", menuController.UpdateMenuController)
 	m.DELETE("/:id", menuController.DeleteMenuController)
 
+	//Menu Route
+	e.GET("/menu", menuController.GetAllMenuController)
+	e.GET("/menu/:id", menuController.GetMenuByIDController)
+
 	//Image Upload Route
 	e.POST("/upload/image", controllers.UploadImageCloudBase64Controller)
 

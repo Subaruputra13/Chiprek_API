@@ -37,6 +37,21 @@ func (m *menuControllers) GetAllMenuController(c echo.Context) error {
 	})
 }
 
+// Controller Get Menu By ID
+func (m *menuControllers) GetMenuByIDController(c echo.Context) error {
+	id, _ := strconv.Atoi(c.Param("id"))
+
+	menu, err := m.menuUsecase.GetMenuByID(int(id))
+	if err != nil {
+		return echo.NewHTTPError(400, err.Error())
+	}
+
+	return c.JSON(200, payload.Response{
+		Message: "Success Get Menu By ID",
+		Data:    menu,
+	})
+}
+
 // Controller Create Menu
 func (m *menuControllers) CreateMenuController(c echo.Context) error {
 	req := payload.CreateMenuRequest{}

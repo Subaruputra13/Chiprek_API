@@ -47,8 +47,8 @@ func (m *menuUsecase) GetMenuByID(id int) (menu *models.Menu, err error) {
 // Create Menu
 func (m *menuUsecase) CreateMenu(req *payload.CreateMenuRequest) (menu *models.Menu, err error) {
 	menuReq := &models.Menu{
-		Nama:       req.Nama,
-		Harga:      req.Harga,
+		Name:       req.Name,
+		Price:      req.Price,
 		ImageURL:   req.ImageUrl,
 		CategoryID: req.CategoryID,
 	}
@@ -67,8 +67,8 @@ func (m *menuUsecase) UpdateMenu(id int, req *payload.UpdateMenuRequest) (menu *
 		return nil, echo.NewHTTPError(400, err.Error())
 	}
 
-	menuid.Nama = req.Nama
-	menuid.Harga = req.Harga
+	menuid.Name = req.Name
+	menuid.Price = req.Price
 	menuid.ImageURL = req.ImageUrl
 
 	menu, err = m.menuRespository.UpdateMenu(menuid)

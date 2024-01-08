@@ -25,7 +25,7 @@ func NewMenuRepository(db *gorm.DB) *menuRespository {
 // Get All Menu
 func (m *menuRespository) GetAllMenu() (menu []models.Menu, err error) {
 
-	if err := m.db.Preload("Pesanan").Find(&menu).Error; err != nil {
+	if err := m.db.Find(&menu).Error; err != nil {
 		return nil, err
 	}
 
@@ -34,7 +34,7 @@ func (m *menuRespository) GetAllMenu() (menu []models.Menu, err error) {
 
 // Get Menu By ID
 func (m *menuRespository) GetMenuByID(id int) (menu *models.Menu, err error) {
-	if err := m.db.Preload("Pesanan").Where("id = ?", id).First(&menu).Error; err != nil {
+	if err := m.db.Where("id = ?", id).First(&menu).Error; err != nil {
 		return nil, err
 	}
 
