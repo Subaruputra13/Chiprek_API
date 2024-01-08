@@ -8,6 +8,6 @@ type DetailPemesanan struct {
 	NamaPemesan      string `json:"nama_pemesan" form:"nama_pemesan"`
 	TanggalPemesanan string `json:"tanggal_pemesanan" form:"tanggal_pemesanan"`
 	Status           bool   `json:"status" form:"status"`
-	MetodePembayaran string `json:"metode_pembayaran" form:"metode_pembayaran" gorm:"type:enum('tunai', 'qris');default:'tunai'"`
+	MetodePembayaran string `json:"metode_pembayaran" form:"metode_pembayaran" gorm:"type:enum('Cash','Qris')"`
 	KeranjangID      int    `json:"keranjang_id" form:"keranjang_id"`
 }

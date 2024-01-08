@@ -20,3 +20,10 @@ type UpdateMenuRequest struct {
 type UploadImageCloudinaryBase64 struct {
 	Image string `json:"image"`
 }
+
+type AddMenuToCartRequest struct {
+	MenuID   int    `json:"menu_id" form:"menu_id" validate:"required"`
+	Quantity int    `json:"quantity" form:"quantity" validate:"required"`
+	TakeAway bool   `json:"take_away" form:"take_away"`
+	Note     string `json:"note" form:"note"`
+}

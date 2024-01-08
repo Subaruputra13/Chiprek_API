@@ -6,7 +6,6 @@ type Cart struct {
 	gorm.Model
 	TotalPrice int  `json:"total_price" form:"total_price"`
 	Status     bool `json:"status" form:"status" gorm:"default:false"`
-	NoTable    int  `json:"no_table" form:"no_table"`
 	CartItem   []CartItem
 }
 
@@ -15,7 +14,6 @@ type CartItem struct {
 	Quantity int    `json:"quantity" form:"quantity"`
 	TakeAway bool   `json:"take_away" form:"take_away"`
 	Note     string `json:"note" form:"note"`
-	NoTable  int    `json:"no_table" form:"no_table"`
 	CartID   int    `json:"cart_id" form:"cart_id"`
 	MenuID   int    `json:"menu_id" form:"menu_id"`
 	Menu     Menu
