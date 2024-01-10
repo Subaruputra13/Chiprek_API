@@ -37,6 +37,23 @@ func (m *menuControllers) GetAllMenuController(c echo.Context) error {
 	})
 }
 
+// Controller Get All Menu
+func (m *menuControllers) GetAllMenuControllerByTableNumber(c echo.Context) error {
+	//query param
+	// tableNumber, _ := strconv.Atoi(c.Param("tableNumber"))
+
+	menu, err := m.menuUsecase.GetAllMenu()
+	if err != nil {
+		return echo.NewHTTPError(400, err.Error())
+
+	}
+
+	return c.JSON(200, payload.Response{
+		Message: "Success Get All Menu",
+		Data:    menu,
+	})
+}
+
 // Controller Get Menu By ID
 func (m *menuControllers) GetMenuByIDController(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))

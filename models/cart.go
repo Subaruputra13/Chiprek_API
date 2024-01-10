@@ -4,9 +4,9 @@ import "gorm.io/gorm"
 
 type Cart struct {
 	gorm.Model
-	TotalPrice int    `json:"total_price" form:"total_price"`
-	Status     string `json:"status" form:"status" gorm:"type:enum('pending','diproses','selesai');default:'pending'"`
-	NoTable    int    `json:"no_table" form:"no_table"`
+	TotalPrice int  `json:"total_price" form:"total_price"`
+	Status     bool `json:"status" form:"status" gorm:"default:false"`
+	NoTable    int  `json:"no_table" form:"no_table"`
 	CartItem   []CartItem
 }
 
