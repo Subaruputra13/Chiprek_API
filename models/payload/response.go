@@ -10,6 +10,12 @@ type LoginResponse struct {
 	Token    string `json:"token"`
 }
 
+type CreateCustomerResponse struct {
+	Name        string `json:"name"`
+	PhoneNumber string `json:"phone_number"`
+	Token       string `json:"token"`
+}
+
 // type MenuResponse struct {
 // 	ID     int    `json:"id"`
 // 	Nama   string `json:"nama"`

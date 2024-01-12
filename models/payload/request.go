@@ -22,8 +22,21 @@ type UploadImageCloudinaryBase64 struct {
 }
 
 type AddMenuToCartRequest struct {
-	MenuID   int    `json:"menu_id" form:"menu_id" validate:"required"`
-	Quantity int    `json:"quantity" form:"quantity" validate:"required"`
-	TakeAway bool   `json:"take_away" form:"take_away"`
-	Note     string `json:"note" form:"note"`
+	CustomerId int    `json:"customer_id" form:"customer_id"`
+	MenuID     int    `json:"menu_id" form:"menu_id" validate:"required"`
+	Quantity   int    `json:"quantity" form:"quantity" validate:"required"`
+	TakeAway   bool   `json:"take_away" form:"take_away"`
+	Note       string `json:"note" form:"note"`
+}
+
+type UpdateCartItemRequest struct {
+	CartItemID int    `json:"cart_item_id" form:"cart_item_id" validate:"required"`
+	Quantity   int    `json:"quantity" form:"quantity" validate:"required"`
+	TakeAway   bool   `json:"take_away" form:"take_away"`
+	Note       string `json:"note" form:"note"`
+}
+
+type CreateCustomerRequest struct {
+	Name        string `json:"name" form:"name" validate:"required"`
+	PhoneNumber string `json:"phone_number" form:"phone_number" validate:"max=11,min=10,number"`
 }

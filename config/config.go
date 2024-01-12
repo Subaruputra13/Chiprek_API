@@ -21,7 +21,7 @@ type Config struct {
 
 func InitDB() *gorm.DB {
 	config := Config{
-		DB_Username: "root",
+		DB_Username: "alta",
 		DB_Password: "root",
 		DB_Port:     "3306",
 		DB_Host:     "localhost",
@@ -57,6 +57,7 @@ func InitMigrate() {
 		&models.Admin{},
 		&models.Category{},
 		&models.Menu{},
+		&models.Customer{},
 		&models.Cart{},
 		&models.CartItem{},
 	)

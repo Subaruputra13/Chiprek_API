@@ -26,6 +26,11 @@ func NewRoute(e *echo.Echo, db *gorm.DB) {
 	adminUsecase := usecase.NewAdminUsecase(adminRepository)
 	adminController := controllers.NewAdminController(adminUsecase)
 
+	//Customer
+	customerRepository := database.NewCustomerRepository(db)
+	customerUsecase := usecase.NewCustomerUsecase(customerRepository)
+	customerController := controllers.NewCustomerControllers(customerUsecase)
+
 	//Menu
 	menuRepository := database.NewMenuRepository(db)
 	menuUsecase := usecase.NewMenuUsecase(menuRepository)
@@ -36,13 +41,26 @@ func NewRoute(e *echo.Echo, db *gorm.DB) {
 	categoryUsecase := usecase.NewCategoryUsecase(categoryRepository)
 	categoryController := controllers.NewCategoryControllers(categoryUsecase)
 
-	//Admin Route
+	//Cart
+	cartRepository := database.NewCartRepository(db)
+	cartUsecase := usecase.NewCartUsecase(cartRepository, menuRepository)
+	cartController := controllers.NewCartControllers(cartUsecase)
+
+	// Auth Route
 	e.POST("/admin", adminController.LoginAdminController)
-	m := e.Group("/Dashboard/Menu", m.IsLoggedIn)
-	m.GET("", menuController.GetAllMenuController)
-	m.POST("", menuController.CreateMenuController)
-	m.PUT("/:id", menuController.UpdateMenuController)
-	m.DELETE("/:id", menuController.DeleteMenuController)
+
+	//Admin Route
+	me := e.Group("/dashboard/menu", m.IsLoggedIn)
+	me.GET("", menuController.GetAllMenuController)
+	me.POST("", menuController.CreateMenuController)
+	me.PUT("/:id", menuController.UpdateMenuController)
+	me.DELETE("/:id", menuController.DeleteMenuController)
+
+	//Customer Route
+	cu := e.Group("/customer", m.IsLoggedIn)
+	cu.POST("", customerController.CreateCustomerControllers)
+	cu.GET("/cart", cartController.GetCartByCustomerIDControllers)
+	cu.POST("/cart", cartController.AddMenuToCartControllers)
 
 	//Menu Route
 	e.GET("/menu", menuController.GetAllMenuController)

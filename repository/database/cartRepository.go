@@ -7,6 +7,9 @@ import (
 )
 
 type CartRepository interface {
+	// GetCartByID(id int) (cart *models.Cart, err error)
+	// GetCartItemByID(id int) (cartItem *models.CartItem, err error)
+	GetCartByCustomerID(customerID int) (cart *models.Cart, err error)
 	CreateCart(cart *models.Cart) error
 	CreateCartItem(cartItem *models.CartItem) error
 	UpdateCart(cart *models.Cart) error
@@ -21,6 +24,36 @@ type cartRepository struct {
 
 func NewCartRepository(db *gorm.DB) *cartRepository {
 	return &cartRepository{db}
+}
+
+// Get cart by ID
+// func (c *cartRepository) GetCartByID(id int) (cart *models.Cart, err error) {
+// 	err = c.db.Where("id = ?", id).First(&cart).Error
+// 	if err != nil {
+// 		return nil, err
+// 	}
+
+// 	return cart, nil
+// }
+
+// Get cart item by ID
+// func (c *cartRepository) GetCartItemByID(id int) (cartItem *models.CartItem, err error) {
+// 	err = c.db.Where("id = ?", id).First(&cartItem).Error
+// 	if err != nil {
+// 		return nil, err
+// 	}
+
+// 	return cartItem, nil
+// }
+
+// Get Cart By Customer ID
+func (c *cartRepository) GetCartByCustomerID(customerID int) (cart *models.Cart, err error) {
+	err = c.db.Preload("CartItem.Menu").Where("customer_id = ? AND status = ?", customerID, true).First(&cart).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return cart, nil
 }
 
 // Create cart
