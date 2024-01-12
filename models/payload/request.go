@@ -30,10 +30,16 @@ type AddMenuToCartRequest struct {
 }
 
 type UpdateCartItemRequest struct {
+	CustomerId int    `json:"customer_id" form:"customer_id"`
 	CartItemID int    `json:"cart_item_id" form:"cart_item_id" validate:"required"`
 	Quantity   int    `json:"quantity" form:"quantity" validate:"required"`
 	TakeAway   bool   `json:"take_away" form:"take_away"`
 	Note       string `json:"note" form:"note"`
+}
+
+type DeleteCartItemRequest struct {
+	CustomerId int `json:"customer_id" form:"customer_id"`
+	CartItemID int `json:"cart_item_id" form:"cart_item_id" validate:"required"`
 }
 
 type CreateCustomerRequest struct {

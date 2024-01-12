@@ -60,6 +60,7 @@ func InitMigrate() {
 		&models.Customer{},
 		&models.Cart{},
 		&models.CartItem{},
+		&models.Transaction{},
 	)
 
 	if err != nil {

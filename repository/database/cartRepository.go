@@ -10,6 +10,7 @@ type CartRepository interface {
 	// GetCartByID(id int) (cart *models.Cart, err error)
 	// GetCartItemByID(id int) (cartItem *models.CartItem, err error)
 	GetCartByCustomerID(customerID int) (cart *models.Cart, err error)
+	GetCartItemByID(item int) (cartItem *models.CartItem, err error)
 	CreateCart(cart *models.Cart) error
 	CreateCartItem(cartItem *models.CartItem) error
 	UpdateCart(cart *models.Cart) error
@@ -48,12 +49,22 @@ func NewCartRepository(db *gorm.DB) *cartRepository {
 
 // Get Cart By Customer ID
 func (c *cartRepository) GetCartByCustomerID(customerID int) (cart *models.Cart, err error) {
-	err = c.db.Preload("CartItem.Menu").Where("customer_id = ? AND status = ?", customerID, true).First(&cart).Error
+	err = c.db.Preload("CartItem.Menu").Preload("Customer").Where("customer_id = ? AND status = ?", customerID, true).First(&cart).Error
 	if err != nil {
 		return nil, err
 	}
 
 	return cart, nil
+}
+
+// Get Cart Item By Cart ID
+func (c *cartRepository) GetCartItemByID(item int) (cartItem *models.CartItem, err error) {
+	err = c.db.Preload("Menu").Where("id = ?", item).First(&cartItem).Error
+	if err != nil {
+		return nil, err
+	}
+
+	return cartItem, nil
 }
 
 // Create cart

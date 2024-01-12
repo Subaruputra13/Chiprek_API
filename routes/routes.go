@@ -57,10 +57,11 @@ func NewRoute(e *echo.Echo, db *gorm.DB) {
 	me.DELETE("/:id", menuController.DeleteMenuController)
 
 	//Customer Route
-	cu := e.Group("/customer", m.IsLoggedIn)
+	cu := e.Group("/customer")
 	cu.POST("", customerController.CreateCustomerControllers)
-	cu.GET("/cart", cartController.GetCartByCustomerIDControllers)
-	cu.POST("/cart", cartController.AddMenuToCartControllers)
+	cu.GET("/cart", cartController.GetCartByCustomerIDControllers, m.IsLoggedIn)
+	cu.POST("/cart", cartController.AddMenuToCartControllers, m.IsLoggedIn)
+	cu.DELETE("/cart", cartController.DeleteCartItemControllers, m.IsLoggedIn)
 
 	//Menu Route
 	e.GET("/menu", menuController.GetAllMenuController)

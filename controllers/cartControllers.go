@@ -61,3 +61,49 @@ func (ca *cartControllers) AddMenuToCartControllers(c echo.Context) error {
 
 	return c.JSON(200, "Success Add Menu to Cart")
 }
+
+// Controller Update Cart Item
+// func (ca *cartControllers) UpdateCartItemControllers(c echo.Context) error {
+// 	req := payload.UpdateCartItemRequest{}
+
+// 	CustomerId, err := middleware.IsCustomer(c)
+// 	if err != nil {
+// 		return echo.NewHTTPError(400, err.Error())
+// 	}
+
+// 	c.Bind(&req)
+
+// 	if err := c.Validate(req); err != nil {
+// 		return echo.NewHTTPError(400, "Field cannot be empty")
+// 	}
+
+// 	err = ca.cartUsecase.UpdateCartItem(CustomerId, &req)
+// 	if err != nil {
+// 		return echo.NewHTTPError(400, err.Error())
+// 	}
+
+// 	return c.JSON(200, "Success Update Cart Item")
+// }
+
+// Controller Delete Cart Item
+func (ca *cartControllers) DeleteCartItemControllers(c echo.Context) error {
+	req := payload.DeleteCartItemRequest{}
+
+	CustomerId, err := middleware.IsCustomer(c)
+	if err != nil {
+		return echo.NewHTTPError(400, err.Error())
+	}
+
+	c.Bind(&req)
+
+	if err := c.Validate(req); err != nil {
+		return echo.NewHTTPError(400, "Field cannot be empty")
+	}
+
+	err = ca.cartUsecase.DeleteCartItem(CustomerId, &req)
+	if err != nil {
+		return echo.NewHTTPError(400, err.Error())
+	}
+
+	return c.JSON(200, "Success Delete Cart Item")
+}

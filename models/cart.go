@@ -4,7 +4,8 @@ import "gorm.io/gorm"
 
 type Cart struct {
 	gorm.Model
-	CustomerID int  `json:"customer_id" form:"customer_id"`
+	CustomerID int `json:"customer_id" form:"customer_id"`
+	Customer   Customer
 	TotalPrice int  `json:"total_price" form:"total_price"`
 	TotalItem  int  `json:"total_item" form:"total_item"`
 	Status     bool `json:"status" form:"status" gorm:"default:false"`
