@@ -46,3 +46,11 @@ type CreateCustomerRequest struct {
 	Name        string `json:"name" form:"name" validate:"required"`
 	PhoneNumber string `json:"phone_number" form:"phone_number" validate:"max=11,min=10,number"`
 }
+
+type CreateTransactionRequest struct {
+	CustomerID   int    `json:"customer_id" form:"customer_id"`
+	CartID       int    `json:"cart_id" form:"cart_id"`
+	CustomerName string `json:"customer_name" form:"customer_name"`
+	NoHandphone  string `json:"no_handphone" form:"no_handphone"`
+	PaymentType  string `json:"payment_type" form:"payment_type" gorm:"type:enum('cash','qris')"`
+}

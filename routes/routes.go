@@ -46,6 +46,11 @@ func NewRoute(e *echo.Echo, db *gorm.DB) {
 	cartUsecase := usecase.NewCartUsecase(cartRepository, menuRepository)
 	cartController := controllers.NewCartControllers(cartUsecase)
 
+	//Transaction
+	transactionRepository := database.NewTransactionRepository(db)
+	transactionUsecase := usecase.NewTransactionUsecase(transactionRepository, cartRepository)
+	transactionController := controllers.NewTransactionController(transactionUsecase)
+
 	// Auth Route
 	e.POST("/admin", adminController.LoginAdminController)
 
@@ -61,6 +66,7 @@ func NewRoute(e *echo.Echo, db *gorm.DB) {
 	cu.POST("", customerController.CreateCustomerControllers)
 	cu.GET("/cart", cartController.GetCartByCustomerIDControllers, m.IsLoggedIn)
 	cu.POST("/cart", cartController.AddMenuToCartControllers, m.IsLoggedIn)
+	cu.POST("/transaction", transactionController.CreateTransactionController, m.IsLoggedIn)
 	cu.DELETE("/cart", cartController.DeleteCartItemControllers, m.IsLoggedIn)
 
 	//Menu Route

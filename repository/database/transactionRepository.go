@@ -21,8 +21,8 @@ func NewTransactionRepository(db *gorm.DB) *transactionRepository {
 }
 
 // Get All Transaction by new date
-func (r *transactionRepository) GetAllTransactionRepository() (transaction []models.Transaction, err error) {
-	err = r.db.Order("order_time desc").Find(&transaction).Error
+func (t *transactionRepository) GetAllTransactionRepository() (transaction []models.Transaction, err error) {
+	err = t.db.Preload("Customer").Preload("Cart").Order("order_time desc").Find(&transaction).Error
 	if err != nil {
 		return nil, err
 	}
@@ -30,13 +30,28 @@ func (r *transactionRepository) GetAllTransactionRepository() (transaction []mod
 }
 
 // create new transaction
-func (r *transactionRepository) CreateTransactionRepository(tx *gorm.DB, transaction *models.Transaction) error {
+func (t *transactionRepository) CreateTransactionRepository(tx *gorm.DB, transaction *models.Transaction) error {
 	db := config.DB
 	if tx != nil {
 		db = tx
 	}
 
-	err := db.Preload("Cart").Create(&transaction).Error
+	err := db.Preload("Customer").Preload("Cart").Create(&transaction).Error
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// update transaction
+func (t *transactionRepository) UpdateTransactionRepository(tx *gorm.DB, transaction *models.Transaction) error {
+	db := config.DB
+	if tx != nil {
+		db = tx
+	}
+
+	err := db.Updates(&transaction).Error
 	if err != nil {
 		return err
 	}
