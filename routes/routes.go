@@ -17,6 +17,7 @@ func NewRoute(e *echo.Echo, db *gorm.DB) {
 	//Middleware
 	m.LogMiddleware(e)
 	e.Pre(mid.RemoveTrailingSlash())
+	e.Use(mid.CORS())
 
 	//Validator
 	e.Validator = &util.CustomValidator{Validator: validator.New()}

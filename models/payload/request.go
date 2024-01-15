@@ -44,7 +44,7 @@ type DeleteCartItemRequest struct {
 
 type CreateCustomerRequest struct {
 	Name        string `json:"name" form:"name" validate:"required"`
-	PhoneNumber string `json:"phone_number" form:"phone_number" validate:"max=11,min=10,number"`
+	PhoneNumber string `json:"phone_number" form:"phone_number" validate:"max=12,min=10,number"`
 }
 
 type CreateTransactionRequest struct {

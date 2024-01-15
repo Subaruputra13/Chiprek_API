@@ -25,7 +25,7 @@ func NewCustomerUsecase(customerRepository database.CustomerRepository) *custome
 func (c *customerUsecase) CreateCustomer(req *payload.CreateCustomerRequest) (res payload.CreateCustomerResponse, err error) {
 	customerReq := models.Customer{
 		Name:        req.Name,
-		PhoneNumber: "0" + req.PhoneNumber,
+		PhoneNumber: req.PhoneNumber,
 	}
 
 	customer, err := c.CustomerRepository.CreateCustomer(&customerReq)

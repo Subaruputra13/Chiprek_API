@@ -26,7 +26,7 @@ func (cu *customerControllers) CreateCustomerControllers(c echo.Context) error {
 	c.Bind(&req)
 
 	if err := c.Validate(&req); err != nil {
-		return echo.NewHTTPError(400, "Field cannot be empty")
+		return echo.NewHTTPError(400, err.Error())
 	}
 
 	res, err := cu.customerUsecase.CreateCustomer(&req)
