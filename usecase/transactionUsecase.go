@@ -9,10 +9,14 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/labstack/echo"
 )
 
 type TransactionUsecase interface {
 	CreateTransactionUsecase(id int, req *payload.CreateTransactionRequest) (res models.Transaction, err error)
+	GetAllTransaction() ([]models.Transaction, error)
+	GetTransactionById(id int) (*models.Transaction, error)
+	GetTransactionByCustomerId(id int) (*models.Transaction, error)
 }
 
 type transactionUsecase struct {
@@ -60,7 +64,7 @@ func (t *transactionUsecase) CreateTransactionUsecase(id int, req *payload.Creat
 	}()
 
 	// create transaction
-	err = t.transactionRepository.CreateTransactionRepository(nil, &transaction)
+	err = t.transactionRepository.CreateTransaction(nil, &transaction)
 	if err != nil {
 		return res, err
 	}
@@ -69,6 +73,36 @@ func (t *transactionUsecase) CreateTransactionUsecase(id int, req *payload.Creat
 	if err != nil {
 		errors.New("Failed to commit transaction")
 		return
+	}
+
+	return transaction, nil
+}
+
+// Get all transaction
+func (t *transactionUsecase) GetAllTransaction() ([]models.Transaction, error) {
+	transaction, err := t.transactionRepository.GetAllTransactionRepository()
+	if err != nil {
+		return nil, err
+	}
+
+	return transaction, nil
+}
+
+// Get transaction by id
+func (t *transactionUsecase) GetTransactionById(id int) (*models.Transaction, error) {
+	transaction, err := t.transactionRepository.GetTransactionById(id)
+	if err != nil {
+		return nil, echo.NewHTTPError(400, err.Error())
+	}
+
+	return transaction, nil
+}
+
+// Get transaction by customer id
+func (t *transactionUsecase) GetTransactionByCustomerId(id int) (*models.Transaction, error) {
+	transaction, err := t.transactionRepository.GetTransactionByCustomerId(id)
+	if err != nil {
+		return nil, echo.NewHTTPError(400, err.Error())
 	}
 
 	return transaction, nil

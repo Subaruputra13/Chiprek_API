@@ -39,3 +39,12 @@ func (a *adminRespository) GetAdminUsername(username string) (*models.Admin, err
 
 	return &admin, nil
 }
+
+// Update Transaction
+func (a *adminRespository) UpdateTransaction(transaction *models.Transaction) error {
+	if err := config.DB.Updates(&transaction).Error; err != nil {
+		return err
+	}
+
+	return nil
+}
