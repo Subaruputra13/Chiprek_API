@@ -50,6 +50,7 @@ jobs:
               -e DB_PORT=${{secrets.DB_PORT}} \
               -e DB_PASSWORD=${{secrets.DB_PASSWORD}} \
               -e DB_USERNAME=${{secrets.DB_USERNAME}} \
+              -e CLOUDINARY_URL=${{secrets.CLOUDINARY_URL}} \
               -e DB_NAME=${{secrets.DB_NAME}} \
               -p 8080:8080 \
               --name chiprek1 \
