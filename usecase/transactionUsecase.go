@@ -5,6 +5,7 @@ import (
 	"Chiprek/models"
 	"Chiprek/models/payload"
 	"Chiprek/repository/database"
+	"Chiprek/util"
 	"errors"
 	"time"
 
@@ -13,10 +14,11 @@ import (
 )
 
 type TransactionUsecase interface {
-	CreateTransactionUsecase(id int, req *payload.CreateTransactionRequest) (res models.Transaction, err error)
+	CreateTransactionUsecase(id int) (res models.Transaction, err error)
 	GetAllTransaction() ([]models.Transaction, error)
 	GetTransactionById(id int) (*models.Transaction, error)
 	GetTransactionByCustomerId(id int) (*models.Transaction, error)
+	ProcessPayment(req *payload.TransactionNotificationInput) error
 }
 
 type transactionUsecase struct {
@@ -29,7 +31,7 @@ func NewTransactionUsecase(transactionRepository database.TransactionRepository,
 }
 
 // Create transaction
-func (t *transactionUsecase) CreateTransactionUsecase(id int, req *payload.CreateTransactionRequest) (res models.Transaction, err error) {
+func (t *transactionUsecase) CreateTransactionUsecase(id int) (res models.Transaction, err error) {
 	// get cart by customer id
 	cart, err := t.cartRespository.GetCartByCustomerID(id)
 	if err != nil {
@@ -50,10 +52,10 @@ func (t *transactionUsecase) CreateTransactionUsecase(id int, req *payload.Creat
 		PhoneNumber:   cart.Customer.PhoneNumber,
 		TranscationId: transactionId,
 		OrderType:     "Dine In",
-		OrderTime:     time.Now(),
-		PaymentType:   req.PaymentType,
-		Status:        false,
-		TotalPrice:    cart.TotalPrice,
+		// OrderTime:     time.Now(),
+		// PaymentType:   req.PaymentType,
+		Status:     "Waiting for Payment",
+		TotalPrice: cart.TotalPrice,
 	}
 
 	tx := config.DB.Begin()
@@ -64,7 +66,22 @@ func (t *transactionUsecase) CreateTransactionUsecase(id int, req *payload.Creat
 	}()
 
 	// create transaction
-	err = t.transactionRepository.CreateTransaction(nil, &transaction)
+	err = t.transactionRepository.CreateTransaction(tx, &transaction)
+	if err != nil {
+		return res, err
+	}
+
+	// Midtrans
+	responseMidtrans, err := util.GetPaymentURL(&transaction, &cart.Customer)
+	if err != nil {
+		return res, err
+	}
+
+	// update payment url
+	transaction.PaymentURL = responseMidtrans.RedirectURL
+
+	// update transaction
+	err = t.transactionRepository.UpdateTransaction(tx, &transaction)
 	if err != nil {
 		return res, err
 	}
@@ -76,6 +93,54 @@ func (t *transactionUsecase) CreateTransactionUsecase(id int, req *payload.Creat
 	}
 
 	return transaction, nil
+}
+
+func (t *transactionUsecase) ProcessPayment(req *payload.TransactionNotificationInput) error {
+	transaction, err := t.transactionRepository.GetTransactionByTransactionId(req.OrderID)
+	if err != nil {
+		return err
+	}
+
+	tx := config.DB.Begin()
+	defer func() {
+		if err != nil {
+			tx.Rollback()
+		}
+	}()
+
+	// update payment status
+	transaction.PaymentStatus = req.TransactionStatus
+
+	if req.TransactionStatus == "settlement" || req.TransactionStatus == "capture" {
+		transaction.Status = "On Process"
+		transaction.PaymentStatus = "Paid"
+
+		date, err := time.Parse("2006-01-02 15:04:05", req.TransactionTime)
+		if err != nil {
+			return err
+		}
+
+		transaction.PaymentDate = &date
+		err = t.transactionRepository.UpdateTransaction(tx, transaction)
+		if err != nil {
+			return err
+		}
+	}
+
+	transaction.Status = "Cancelled"
+	transaction.PaymentStatus = "Cancelled"
+	err = t.transactionRepository.UpdateTransaction(tx, transaction)
+	if err != nil {
+		return err
+	}
+
+	err = tx.Commit().Error
+	if err != nil {
+		errors.New("Failed to commit transaction")
+		return err
+	}
+
+	return nil
 }
 
 // Get all transaction

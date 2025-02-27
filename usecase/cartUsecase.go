@@ -47,13 +47,13 @@ func (c *cartUsecase) AddMenuToCart(id int, req *payload.AddMenuToCartRequest) e
 
 		err = c.cartRepository.CreateCart(&cartReq)
 		if err != nil {
-			return echo.NewHTTPError(400, err.Error())
+			return echo.NewHTTPError(400, "Failed to create cart")
 		}
 	}
 
 	cart, err := c.cartRepository.GetCartByCustomerID(id)
 	if err != nil {
-		return echo.NewHTTPError(400, err.Error())
+		return echo.NewHTTPError(400, "Cart not found")
 	}
 
 	cartItemReq := models.CartItem{
@@ -66,7 +66,7 @@ func (c *cartUsecase) AddMenuToCart(id int, req *payload.AddMenuToCartRequest) e
 
 	err = c.cartRepository.CreateCartItem(&cartItemReq)
 	if err != nil {
-		return echo.NewHTTPError(400, err.Error())
+		return echo.NewHTTPError(400, "Failed to create cart item")
 	}
 
 	// update cart total price
@@ -74,7 +74,7 @@ func (c *cartUsecase) AddMenuToCart(id int, req *payload.AddMenuToCartRequest) e
 	cart.TotalItem += req.Quantity
 	err = c.cartRepository.UpdateCart(cart)
 	if err != nil {
-		return echo.NewHTTPError(400, err.Error())
+		return echo.NewHTTPError(400, "Failed to update cart")
 	}
 
 	return nil

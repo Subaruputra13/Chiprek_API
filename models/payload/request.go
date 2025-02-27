@@ -38,7 +38,6 @@ type UpdateCartItemRequest struct {
 }
 
 type DeleteCartItemRequest struct {
-	CustomerId int `json:"customer_id" form:"customer_id"`
 	CartItemID int `json:"cart_item_id" form:"cart_item_id" validate:"required"`
 }
 
@@ -52,5 +51,12 @@ type CreateTransactionRequest struct {
 	CartID       int    `json:"cart_id" form:"cart_id"`
 	CustomerName string `json:"customer_name" form:"customer_name"`
 	NoHandphone  string `json:"no_handphone" form:"no_handphone"`
-	PaymentType  string `json:"payment_type" form:"payment_type" gorm:"type:enum('cash','qris')"`
+	// PaymentType  string `json:"payment_type" form:"payment_type" gorm:"type:enum('cash','qris')"`
+}
+
+type TransactionNotificationInput struct {
+	TransactionStatus string `json:"transaction_status"`
+	TransactionTime   string `json:"transaction_time"`
+	OrderID           string `json:"order_id"`
+	PaymentType       string `json:"payment_type"`
 }

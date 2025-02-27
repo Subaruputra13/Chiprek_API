@@ -23,20 +23,20 @@ func NewTransactionController(transactionUsecase usecase.TransactionUsecase) *tr
 
 // Controller Create Transaction
 func (t *transactionController) CreateTransactionController(c echo.Context) error {
-	req := payload.CreateTransactionRequest{}
+	// req := payload.CreateTransactionRequest{}
 
 	CustomerId, err := middleware.IsCustomer(c)
 	if err != nil {
 		return echo.NewHTTPError(400, err.Error())
 	}
 
-	c.Bind(&req)
+	// c.Bind(&req)
 
-	if err := c.Validate(req); err != nil {
-		return echo.NewHTTPError(400, err.Error())
-	}
+	// if err := c.Validate(req); err != nil {
+	// 	return echo.NewHTTPError(400, err.Error())
+	// }
 
-	transaction, err := t.transactionUsecase.CreateTransactionUsecase(CustomerId, &req)
+	transaction, err := t.transactionUsecase.CreateTransactionUsecase(CustomerId)
 	if err != nil {
 		return echo.NewHTTPError(400, err.Error())
 	}
@@ -90,5 +90,25 @@ func (t *transactionController) GetTransactionByCustomerIdController(c echo.Cont
 	return c.JSON(200, payload.Response{
 		Message: "Success Get Transaction By Customer Id",
 		Data:    transaction,
+	})
+}
+
+func (t *transactionController) GetNotificationController(c echo.Context) error {
+	payloadNotification := payload.TransactionNotificationInput{}
+
+	c.Bind(&payloadNotification)
+
+	if err := c.Validate(payloadNotification); err != nil {
+		return echo.NewHTTPError(400, err.Error())
+	}
+
+	err := t.transactionUsecase.ProcessPayment(&payloadNotification)
+	if err != nil {
+		return echo.NewHTTPError(400, err.Error())
+	}
+
+	return c.JSON(200, payload.Response{
+		Message: "Success Process Payment",
+		Data:    nil,
 	})
 }

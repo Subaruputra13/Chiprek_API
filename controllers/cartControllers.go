@@ -91,7 +91,7 @@ func (ca *cartControllers) DeleteCartItemControllers(c echo.Context) error {
 
 	CustomerId, err := middleware.IsCustomer(c)
 	if err != nil {
-		return echo.NewHTTPError(400, err.Error())
+		return echo.NewHTTPError(400, " Customer not found")
 	}
 
 	c.Bind(&req)
@@ -102,7 +102,7 @@ func (ca *cartControllers) DeleteCartItemControllers(c echo.Context) error {
 
 	err = ca.cartUsecase.DeleteCartItem(CustomerId, &req)
 	if err != nil {
-		return echo.NewHTTPError(400, err.Error())
+		return echo.NewHTTPError(400, "Cart Item not found")
 	}
 
 	return c.JSON(200, "Success Delete Cart Item")

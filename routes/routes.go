@@ -54,6 +54,7 @@ func NewRoute(e *echo.Echo, db *gorm.DB) {
 
 	// Auth Route
 	e.POST("/admin", adminController.LoginAdminController)
+	e.POST("/notification", transactionController.GetNotificationController)
 
 	//Admin Route
 	me := e.Group("/dashboard/menu", m.IsLoggedIn)
