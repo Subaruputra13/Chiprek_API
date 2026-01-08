@@ -3,6 +3,7 @@ package controllers
 import (
 	"Chiprek/models/payload"
 	"Chiprek/usecase"
+	"strconv"
 
 	"github.com/labstack/echo"
 )
@@ -36,5 +37,33 @@ func (a *adminController) LoginAdminController(c echo.Context) error {
 	return c.JSON(200, payload.Response{
 		Message: "Login Berhasil",
 		Data:    res,
+	})
+}
+
+// Controller Dashboard Admin
+func (a *adminController) DashboardAdminController(c echo.Context) error {
+	res, err := a.adminUsecase.DashboardAdmin()
+	if err != nil {
+		return echo.NewHTTPError(400, err.Error())
+	}
+
+	return c.JSON(200, payload.Response{
+		Message: "Success Get Dashboard Admin",
+		Data:    res,
+	})
+}
+
+// Controller Get Menu By ID
+func (a *adminController) GetMenuByIDController(c echo.Context) error {
+	id, _ := strconv.Atoi(c.Param("id"))
+
+	menu, err := a.adminUsecase.GetMenuByID(id)
+	if err != nil {
+		return echo.NewHTTPError(400, err.Error())
+	}
+
+	return c.JSON(200, payload.Response{
+		Message: "Success Get Menu By ID",
+		Data:    menu,
 	})
 }

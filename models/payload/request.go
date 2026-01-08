@@ -12,9 +12,10 @@ type CreateMenuRequest struct {
 	CategoryID int    `json:"category_id" form:"category_id" validate:"required"`
 }
 type UpdateMenuRequest struct {
-	Name     string `json:"name" form:"name"`
-	Price    int    `json:"price" form:"price"`
-	ImageUrl string `json:"image_url" form:"image_url"`
+	CategoryId int    `json:"category_id" form:"category_id"`
+	Name       string `json:"name" form:"name"`
+	Price      int    `json:"price" form:"price"`
+	ImageUrl   string `json:"image_url" form:"image_url"`
 }
 
 type UploadImageCloudinaryBase64 struct {
@@ -59,4 +60,8 @@ type TransactionNotificationInput struct {
 	TransactionTime   string `json:"transaction_time"`
 	OrderID           string `json:"order_id"`
 	PaymentType       string `json:"payment_type"`
+}
+
+type UpdateTransactionRequest struct {
+	Status string `json:"status" form:"status"`
 }

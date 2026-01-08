@@ -93,6 +93,7 @@ func (t *transactionController) GetTransactionByCustomerIdController(c echo.Cont
 	})
 }
 
+// Controller Get Noitification
 func (t *transactionController) GetNotificationController(c echo.Context) error {
 	payloadNotification := payload.TransactionNotificationInput{}
 
@@ -111,4 +112,33 @@ func (t *transactionController) GetNotificationController(c echo.Context) error 
 		Message: "Success Process Payment",
 		Data:    nil,
 	})
+}
+
+// Controller Update Transaction By Id
+func (t *transactionController) UpdateTransactionByIdController(c echo.Context) error {
+	req := payload.UpdateTransactionRequest{}
+
+	c.Bind(&req)
+
+	if err := c.Validate(req); err != nil {
+		return echo.NewHTTPError(400, err.Error())
+	}
+
+	id, _ := strconv.Atoi(c.Param("id"))
+
+	transaction, err := t.transactionUsecase.GetTransactionById(id)
+	if err != nil {
+		return echo.NewHTTPError(400, err.Error())
+	}
+
+	err = t.transactionUsecase.UpdateTransactionStatusById(transaction, &req)
+	if err != nil {
+		return echo.NewHTTPError(400, err.Error())
+	}
+
+	return c.JSON(200, payload.Response{
+		Message: "Success Update Transaction By Id",
+		Data:    transaction,
+	})
+
 }

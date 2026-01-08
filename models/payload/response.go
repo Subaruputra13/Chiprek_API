@@ -16,6 +16,13 @@ type CreateCustomerResponse struct {
 	Token       string `json:"token"`
 }
 
+type DashboardAdminResponse struct {
+	TotalMenus  uint `json:"total_menus"`
+	TotalOrders uint `json:"total_orders"`
+	TotalUsers  uint `json:"total_users"`
+	TotalIncome uint `json:"total_income"`
+}
+
 // type MenuResponse struct {
 // 	ID     int    `json:"id"`
 // 	Nama   string `json:"nama"`

@@ -67,6 +67,7 @@ func (m *menuUsecase) UpdateMenu(id int, req *payload.UpdateMenuRequest) (menu *
 		return nil, echo.NewHTTPError(400, err.Error())
 	}
 
+	menuid.CategoryID = req.CategoryId
 	menuid.Name = req.Name
 	menuid.Price = req.Price
 	menuid.ImageURL = req.ImageUrl

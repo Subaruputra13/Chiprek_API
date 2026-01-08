@@ -10,6 +10,7 @@ type CustomerRepository interface {
 	CreateCustomer(customer *models.Customer) (models.Customer, error)
 	UpdateCustomer(customer *models.Customer) (*models.Customer, error)
 	DeleteCustomer(customer *models.Customer) error
+	TotalCustomer() (total int64, err error)
 }
 
 type customerRespository struct {
@@ -45,4 +46,14 @@ func (c *customerRespository) DeleteCustomer(customer *models.Customer) error {
 	}
 
 	return nil
+}
+
+// Total Customer
+func (c *customerRespository) TotalCustomer() (total int64, err error) {
+	Customers := []models.Customer{}
+	if err := c.db.Model(&Customers).Count(&total).Error; err != nil {
+		return 0, err
+	}
+
+	return total, nil
 }

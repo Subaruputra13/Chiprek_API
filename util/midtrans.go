@@ -26,7 +26,7 @@ func GetPaymentURL(transaction *models.Transaction, customer *models.Customer) (
 		},
 
 		TransactionDetails: midtrans.TransactionDetails{
-			OrderID:  transaction.TranscationId,
+			OrderID:  transaction.OrderID,
 			GrossAmt: int64(transaction.TotalPrice),
 		},
 	}

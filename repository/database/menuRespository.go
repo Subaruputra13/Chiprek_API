@@ -12,6 +12,7 @@ type MenuRepository interface {
 	CreateMenu(menu *models.Menu) error
 	UpdateMenu(menu *models.Menu) (*models.Menu, error)
 	DeleteMenu(menu *models.Menu) error
+	TotalMenu() (total int64, err error)
 }
 
 type menuRespository struct {
@@ -66,4 +67,14 @@ func (m *menuRespository) DeleteMenu(menu *models.Menu) error {
 	}
 
 	return nil
+}
+
+// Total Menus
+func (m *menuRespository) TotalMenu() (total int64, err error) {
+	Menus := []models.Menu{}
+	if err := m.db.Model(&Menus).Count(&total).Error; err != nil {
+		return 0, err
+	}
+
+	return total, nil
 }

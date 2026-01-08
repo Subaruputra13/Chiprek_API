@@ -22,11 +22,6 @@ func NewRoute(e *echo.Echo, db *gorm.DB) {
 	//Validator
 	e.Validator = &util.CustomValidator{Validator: validator.New()}
 
-	//Admin
-	adminRepository := database.NewAdminRepository(db)
-	adminUsecase := usecase.NewAdminUsecase(adminRepository)
-	adminController := controllers.NewAdminController(adminUsecase)
-
 	//Customer
 	customerRepository := database.NewCustomerRepository(db)
 	customerUsecase := usecase.NewCustomerUsecase(customerRepository)
@@ -52,17 +47,25 @@ func NewRoute(e *echo.Echo, db *gorm.DB) {
 	transactionUsecase := usecase.NewTransactionUsecase(transactionRepository, cartRepository)
 	transactionController := controllers.NewTransactionController(transactionUsecase)
 
+	//Admin
+	adminRepository := database.NewAdminRepository(db)
+	adminUsecase := usecase.NewAdminUsecase(adminRepository, transactionRepository, menuRepository, customerRepository)
+	adminController := controllers.NewAdminController(adminUsecase)
+
 	// Auth Route
 	e.POST("/admin", adminController.LoginAdminController)
 	e.POST("/notification", transactionController.GetNotificationController)
 
 	//Admin Route
-	me := e.Group("/dashboard/menu", m.IsLoggedIn)
-	me.GET("", menuController.GetAllMenuController)
-	me.POST("", menuController.CreateMenuController)
-	me.PUT("/:id", menuController.UpdateMenuController)
-	me.DELETE("/:id", menuController.DeleteMenuController)
+	me := e.Group("/dashboard", m.IsLoggedIn)
+	me.GET("", adminController.DashboardAdminController)
+	me.GET("/menu", menuController.GetAllMenuController)
+	me.GET("/menu/:id", menuController.GetMenuByIDController)
+	me.POST("/menu", menuController.CreateMenuController)
+	me.PUT("/menu/:id", menuController.UpdateMenuController)
+	me.DELETE("/menu/:id", menuController.DeleteMenuController)
 	me.GET("/transaction", transactionController.GetAllTransactionController)
+	me.PUT("/transaction/:id", transactionController.UpdateTransactionByIdController)
 	me.GET("/transaction/:id", transactionController.GetTransactionByIdController)
 
 	//Customer Route
